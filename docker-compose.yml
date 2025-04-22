@@ -1,0 +1,45 @@
+services:
+  db:
+    image: mysql:latest
+    container_name: mysql_database
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: mysql_data
+      MYSQL_USER: patoarch
+      MYSQL_PASSWORD: 1234
+    volumes:
+      - ./db/mysql:/var/lib/mysql
+    networks:
+      - miibo
+
+  backend:
+    build: ./backend
+    container_name: backend_app
+    restart: always
+    ports:
+      - "3001:3001"
+    environment:
+      - DB_HOST=db
+      - DB_USER=patoarch
+      - DB_PASSWORD=1234
+      - DB_NAME=mysql_data
+    depends_on:
+      - db
+    networks:
+      - miibo
+
+  frontend:
+    build: ./frontend
+    container_name: frontend_app
+    restart: always
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+    networks:
+      - miibo
+
+networks:
+  miibo:
+    driver: bridge

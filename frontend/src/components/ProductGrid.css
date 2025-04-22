@@ -1,0 +1,139 @@
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 30px;
+  padding: 30px;
+  margin-left: 200px;
+}
+
+.product-card {
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.product-image-container {
+  position: relative;
+  padding-top: 100%;
+  overflow: hidden;
+}
+
+.product-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 10px;
+  transition: transform 0.5s ease;
+}
+
+.product-card:hover .product-image {
+  transform: scale(1.05);
+}
+
+.add-to-cart-button {
+  position: absolute;
+  bottom: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 24px;
+  background: #e60012;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.add-to-cart-button.clicked {
+  animation: clickEffect 0.3s ease;
+}
+
+@keyframes clickEffect {
+  0% {
+    transform: translateX(-50%) scale(1);
+  }
+  50% {
+    transform: translateX(-50%) scale(0.95);
+  }
+  100% {
+    transform: translateX(-50%) scale(1);
+  }
+}
+
+.product-card:hover .add-to-cart-button {
+  bottom: 20px;
+  opacity: 1;
+}
+
+.product-info {
+  padding: 20px;
+  transform: translateY(0);
+  transition: transform 0.3s ease;
+}
+
+.product-card:hover .product-info {
+  transform: translateY(-5px);
+}
+
+.product-name {
+  margin: 0 0 10px;
+  font-size: 1.2em;
+  color: #333;
+}
+
+.product-description {
+  margin: 0 0 15px;
+  color: #666;
+  font-size: 0.9em;
+}
+
+.product-price {
+  display: block;
+  font-size: 1.4em;
+  font-weight: 700;
+  color: #e60012;
+  transition: transform 0.3s ease;
+}
+
+.product-card:hover .product-price {
+  transform: scale(1.1);
+}
+
+.no-results {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 50px;
+  color: #666;
+  animation: fadeIn 0.5s ease-out;
+}
+
+@media (max-width: 768px) {
+  .product-grid {
+    margin-left: 60px;
+    gap: 20px;
+    padding: 20px;
+  }
+} 
