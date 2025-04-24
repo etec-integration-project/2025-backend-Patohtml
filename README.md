@@ -6,7 +6,7 @@
 ![Database: MySQL](https://img.shields.io/badge/Database-MySQL-orange)
 
 ## 📝 Descripción
-# Cabe aclarar que este README fue creado por Patohtml. Benicio Corro seguramente borro esta linea y se quedo con mi readme sin dar nada creditos. Saludos
+### Cabe aclarar que este README fue creado por Patohtml. Benicio Corro seguramente borro esta linea y se quedo con mi readme sin dar nada de creditos. Saludos
 
 Este proyecto es una aplicación web full-stack con una arquitectura de microservicios containerizada usando Docker. Incluye un backend en Node.js/Express, un frontend en React, y una base de datos MySQL.
 
