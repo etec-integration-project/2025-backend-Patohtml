@@ -81,7 +81,3 @@ npm start
 ## 📜 Licencia
 
 Este proyecto está bajo la Licencia MIT - ver el archivo LICENSE para más detalles.
-
-## 📞 Contacto
-
-Para cualquier consulta, no dudes en contactarnos a través de [tu-email@example.com].
