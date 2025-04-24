@@ -6,6 +6,7 @@
 ![Database: MySQL](https://img.shields.io/badge/Database-MySQL-orange)
 
 ## 📝 Descripción
+Quiero aclarar tambien que Benicio Corro se robo mi readme, no dio creditos. 
 
 Este proyecto es una aplicación web full-stack con una arquitectura de microservicios containerizada usando Docker. Incluye un backend en Node.js/Express, un frontend en React, y una base de datos MySQL.
 
