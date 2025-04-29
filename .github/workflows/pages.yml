@@ -1,0 +1,77 @@
+name: Deploy 2025-Backend Documentation
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Corre diariamente
+  workflow_dispatch:      # Permite ejecutar manualmente
+  push:
+    branches: [ "main" ]  # Solo en la rama principal
+  issues:
+    types: [opened, closed, edited, deleted]
+  milestone:
+    types: [created, closed, edited, deleted]
+
+# Corregimos la sintaxis de los permisos
+permissions:
+  contents: write    # Para repo y wiki
+  pages: write      # Para GitHub Pages
+  id-token: write   # Para autenticación
+  issues: read      # Para leer issues
+  pull-requests: write  # Para PR y merge
+  repository-projects: write
+  actions: read     # Para acceder a las acciones
+  deployments: write    # Para despliegues
+  statuses: write   # Para actualizar estados
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  build:
+    name: Build 2025-Backend Documentation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 2025-Backend
+        uses: actions/checkout@v4
+      
+      - name: Update Milestone Documentation
+        run: |
+          mkdir -p docs/milestones
+          echo "# Milestones" > docs/milestones/index.md
+          echo "La documentación de milestones se actualizará automáticamente." >> docs/milestones/index.md
+      
+      - name: Update Changelog
+        run: |
+          echo "# Changelog" > docs/changelog.md
+          echo "$(date '+%Y-%m-%d'): Actualización automática del changelog" >> docs/changelog.md
+      
+      - name: Update Release Notes
+        run: |
+          echo "# Release Notes" > docs/releases.md
+          echo "$(date '+%Y-%m-%d'): Actualización automática de las notas de lanzamiento" >> docs/releases.md
+      
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+        
+      - name: Build with Jekyll
+        uses: actions/jekyll-build-pages@v1
+        with:
+          source: ./docs
+          destination: ./_site
+      
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./_site
+      
+  deploy:
+    name: Deploy 2025-Backend Documentation
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy 2025-Backend Documentation to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4 
