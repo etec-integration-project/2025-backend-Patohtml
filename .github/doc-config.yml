@@ -1,0 +1,51 @@
+# Configuración para la documentación automática
+
+# Configuración general
+output:
+  directory: docs
+  format: markdown
+
+# Configuración de milestones
+milestones:
+  enabled: true
+  output_dir: docs/milestones
+  template: .github/templates/milestone.md
+  # Excluir milestones específicos por etiqueta o nombre (opcional)
+  exclude:
+    labels: []
+    names: []
+
+# Configuración de issues
+issues:
+  enabled: true
+  changelog_file: docs/changelog.md
+  template: .github/templates/changelog.md
+  # Categorizar issues por etiquetas
+  categories:
+    - label: bug
+      title: Correcciones de Errores
+    - label: enhancement
+      title: Nuevas Funcionalidades
+    - label: documentation
+      title: Mejoras en Documentación
+    - label: refactor
+      title: Refactorizaciones
+    - label: performance
+      title: Mejoras de Rendimiento
+  # Excluir issues específicos (opcional)
+  exclude:
+    labels: [wontfix, duplicate]
+
+# Configuración de pull requests
+pull_requests:
+  enabled: true
+  releases_file: docs/releases.md
+  template: .github/templates/releases.md
+  # Excluir PRs específicos (opcional)
+  exclude:
+    labels: [wip, do-not-merge]
+
+# Límites y configuración de la API
+api:
+  per_page: 100  # Número de items por página para solicitudes paginadas
+  max_retries: 3  # Número máximo de reintentos para solicitudes fallidas 

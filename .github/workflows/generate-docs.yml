@@ -1,0 +1,57 @@
+name: Generar Documentación Automática
+
+on:
+  milestone:
+    types: [created, edited, closed, deleted]
+  issues:
+    types: [closed, reopened, deleted]
+  pull_request:
+    types: [closed]
+  release:
+    types: [published, edited]
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Razón para ejecutar manualmente'
+        required: true
+        default: 'Actualización manual de documentación'
+
+jobs:
+  generate-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repositorio
+        uses: actions/checkout@v3
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Instalar dependencias
+        run: |
+          npm install @octokit/rest js-yaml handlebars moment
+
+      - name: Generar documentación
+        run: node .github/scripts/generate-docs.js
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Verificar cambios
+        id: verify_changes
+        run: |
+          git status -s docs/
+          if [[ -n "$(git status -s docs/)" ]]; then
+            echo "changes=true" >> $GITHUB_OUTPUT
+          else
+            echo "changes=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit y push si hay cambios
+        if: steps.verify_changes.outputs.changes == 'true'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add docs/
+          git commit -m "docs: Actualizar documentación automática [skip ci]"
+          git push 

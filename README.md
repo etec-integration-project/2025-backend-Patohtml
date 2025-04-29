@@ -58,10 +58,29 @@ Este proyecto es una aplicación web full-stack con una arquitectura de microser
 ├── backend/         # Servidor Node.js con Express
 ├── frontend/        # Aplicación React
 ├── db/              # Datos persistentes de MySQL
+├── docs/            # Documentación automática
 └── docker-compose.yml
 ```
 
-## 👨‍💻 Desarrollo
+## 📖 Documentación Automática
+
+Este proyecto incluye un sistema de generación automática de documentación basada en los cambios en milestones, issues y pull requests de GitHub.
+
+### Características
+
+- **Documentación de Milestones**: Resumen automático de cada milestone con su progreso y issues asociados.
+- **Changelog Automático**: Registro de cambios basado en issues cerrados, categorizados por etiquetas.
+- **Notas de Lanzamiento**: Documentación automática de los pull requests fusionados.
+
+### Cómo Funciona
+
+1. Los cambios en GitHub (creación/cierre de issues, fusión de PRs, etc.) activan workflows de GitHub Actions.
+2. Los scripts procesan la información y generan documentación en formato Markdown.
+3. La documentación se actualiza automáticamente en la carpeta `docs/`.
+
+### Configuración
+
+La configuración se realiza a través del archivo `.github/doc-config.yml`
 
 ### Backend
 ```bash
@@ -81,6 +100,3 @@ npm start
 
 Este proyecto está bajo la Licencia MIT - ver el archivo LICENSE para más detalles.
 
-## 📞 Contacto
-
-Para cualquier consulta, no dudes en contactarnos a través de [tu-email@example.com].
