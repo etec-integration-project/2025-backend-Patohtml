@@ -203,46 +203,19 @@ def generate_wiki_content(wiki_dir: Path, data_dir: Path):
     try:
         # Home.md
         with open(wiki_dir / 'Home.md', 'w', encoding='utf-8') as f:
-            f.write("""# 2025-Backend Project Wiki
-
-Bienvenido a la Wiki del proyecto 2025-Backend, una aplicación web full-stack con arquitectura de microservicios.
+            f.write("""# Frontend E-commerce
+Bienvenido a la Wiki del Frontend E-commerce de Naiara Errecalde.
 
 ## Navegación Rápida
 
 - [[Milestones]]
 - [[Issues-Activos]]
 - [[Issues-Cerrados]]
-- [[Tecnologías]]
-""")
-
-        # Tecnologías.md
-        with open(wiki_dir / 'Tecnologías.md', 'w', encoding='utf-8') as f:
-            f.write("""# Tecnologías Utilizadas
-
-## Backend
-- **Node.js**: Entorno de ejecución para JavaScript
-- **Express**: Framework web para Node.js
-- **Sequelize ORM**: ORM para interactuar con la base de datos
-- **JWT**: Para autenticación segura
-
-## Frontend
-- **React**: Biblioteca JavaScript para interfaces de usuario
-- **React Router**: Enrutamiento para React
-- **Axios**: Cliente HTTP para realizar peticiones
-- **SweetAlert2**: Para notificaciones amigables
-
-## Base de Datos
-- **MySQL**: Sistema de gestión de bases de datos relacional
-
-## Infraestructura
-- **Docker**: Para containerización
-- **Docker Compose**: Para orquestar múltiples contenedores
-- **Nginx**: Como servidor web para el frontend
 """)
 
         # Milestones.md
         with open(wiki_dir / 'Milestones.md', 'w', encoding='utf-8') as f:
-            f.write("# Milestones del Proyecto 2025-Backend\n\n")
+            f.write("# Milestones del Frontend\n\n")
             for ms in milestones:
                 f.write(f"## {ms['title']}\n")
                 f.write(f"**Estado:** {ms['state']}\n\n")
@@ -250,14 +223,6 @@ Bienvenido a la Wiki del proyecto 2025-Backend, una aplicación web full-stack c
                 f.write(f"**Descripción:** {description}\n\n")
                 if ms.get('due_on'):
                     f.write(f"**Fecha límite:** {ms['due_on']}\n\n")
-                
-                # Añadir progreso si está disponible
-                if 'progress' in ms:
-                    f.write(f"**Progreso:** {ms['progress']:.1f}%\n\n")
-                if 'open_issues' in ms and 'closed_issues' in ms:
-                    total = ms['open_issues'] + ms['closed_issues']
-                    f.write(f"**Issues:** {ms['closed_issues']} cerrados de {total} totales\n\n")
-                
                 f.write("---\n\n")
 
         # Issues-Activos.md
@@ -278,12 +243,10 @@ Bienvenido a la Wiki del proyecto 2025-Backend, una aplicación web full-stack c
 
         active_issues = [i for i in issues if i['state'] == 'open']
         with open(wiki_dir / 'Issues-Activos.md', 'w', encoding='utf-8') as f:
-            f.write("# Issues Activos - Proyecto 2025-Backend\n\n")
+            f.write("# Issues Activos - Frontendn\n")
             for issue in active_issues:
                 f.write(f"## #{issue['number']}: {issue['title']}\n")
                 f.write(f"**Creado:** {issue['created_at']}\n\n")
-                
-                # Mostrar milestone (considerar diferentes formatos)
                 if issue.get('milestone'):
                     # Si milestone es un diccionario
                     if isinstance(issue['milestone'], dict):
@@ -292,35 +255,21 @@ Bienvenido a la Wiki del proyecto 2025-Backend, una aplicación web full-stack c
                     else:
                         milestone_title = issue['milestone']
                     f.write(f"**Milestone:** {milestone_title}\n\n")
-                
-                # Mostrar etiquetas
                 if issue.get('labels'):
                     labels = format_labels(issue['labels'])
                     if labels:
                         f.write(f"**Labels:** {', '.join(labels)}\n\n")
-                
-                # Mostrar asignados
-                if issue.get('assignees') and issue['assignees']:
-                    f.write(f"**Asignado a:** {', '.join(issue['assignees'])}\n\n")
-                
-                # Mostrar enlace al issue
-                if issue.get('url'):
-                    f.write(f"**Link:** [{issue['number']}]({issue['url']})\n\n")
-                
-                # Mostrar cuerpo del issue
                 body = issue.get('body') or 'Sin descripción'
                 f.write(f"{body}\n\n---\n\n")
 
         # Issues-Cerrados.md
         closed_issues = [i for i in issues if i['state'] == 'closed']
         with open(wiki_dir / 'Issues-Cerrados.md', 'w', encoding='utf-8') as f:
-            f.write("# Issues Cerrados - Proyecto 2025-Backend\n\n")
+            f.write("# Issues Cerrados - Frontend\n\n")
             for issue in closed_issues:
                 f.write(f"## #{issue['number']}: {issue['title']}\n")
                 f.write(f"**Creado:** {issue['created_at']}\n")
                 f.write(f"**Cerrado:** {issue.get('closed_at', 'Desconocido')}\n\n")
-                
-                # Mostrar milestone (considerar diferentes formatos)
                 if issue.get('milestone'):
                     # Si milestone es un diccionario
                     if isinstance(issue['milestone'], dict):
@@ -329,24 +278,16 @@ Bienvenido a la Wiki del proyecto 2025-Backend, una aplicación web full-stack c
                     else:
                         milestone_title = issue['milestone']
                     f.write(f"**Milestone:** {milestone_title}\n\n")
-                
-                # Mostrar etiquetas
                 if issue.get('labels'):
                     labels = format_labels(issue['labels'])
                     if labels:
                         f.write(f"**Labels:** {', '.join(labels)}\n\n")
-                
-                # Mostrar enlace al issue
-                if issue.get('url'):
-                    f.write(f"**Link:** [{issue['number']}]({issue['url']})\n\n")
-                
-                # Mostrar cuerpo del issue
                 body = issue.get('body') or 'Sin descripción'
                 f.write(f"{body}\n\n---\n\n")
 
         return True
     except IOError as e:
-        print(f"Error escribiendo archivos de la wiki del Proyecto 2025-Backend: {e}")
+        print(f"Error escribiendo archivos de la wiki del Frontend: {e}")
         return False
 
 def verify_json_content(file_path):

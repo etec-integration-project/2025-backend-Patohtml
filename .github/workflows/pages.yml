@@ -1,4 +1,4 @@
-name: Deploy 2025-Backend Documentation
+name: Deploy Frontend E-commerce Documentation
 
 on:
   schedule:
@@ -16,39 +16,51 @@ permissions:
   contents: write    # Para repo y wiki
   pages: write      # Para GitHub Pages
   id-token: write   # Para autenticación
-  issues: read      # Para leer issues
+  issues: read          # Para leer issues
   pull-requests: write  # Para PR y merge
   repository-projects: write
-  actions: read     # Para acceder a las acciones
+  actions: read         # Para acceder a las acciones
   deployments: write    # Para despliegues
-  statuses: write   # Para actualizar estados
+  statuses: write       # Para actualizar estados
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   build:
-    name: Build 2025-Backend Documentation
+    name: Build Frontend Documentation
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout 2025-Backend
+      - name: Checkout Frontend Service
         uses: actions/checkout@v4
       
-      - name: Update Milestone Documentation
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          
+      - name: Install dependencies
         run: |
-          mkdir -p docs/milestones
-          echo "# Milestones" > docs/milestones/index.md
-          echo "La documentación de milestones se actualizará automáticamente." >> docs/milestones/index.md
-      
-      - name: Update Changelog
+          python -m pip install --upgrade pip
+          pip install PyGithub markdown2 jinja2 requests
+
+      - name: Fetch Frontend Service Issues and Milestones
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo "# Changelog" > docs/changelog.md
-          echo "$(date '+%Y-%m-%d'): Actualización automática del changelog" >> docs/changelog.md
-      
-      - name: Update Release Notes
+          python scripts/fetch_github_data.py
+
+      - name: Generate Frontend Documentation
         run: |
-          echo "# Release Notes" > docs/releases.md
-          echo "$(date '+%Y-%m-%d'): Actualización automática de las notas de lanzamiento" >> docs/releases.md
+          python scripts/generate_docs.py
+
+      - name: Generate Frontend Wiki
+        env:
+          GITHUB_TOKEN: ${{ secrets.WIKI_TOKEN }}
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          python scripts/generate_wiki.py
       
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -65,13 +77,13 @@ jobs:
           path: ./_site
       
   deploy:
-    name: Deploy 2025-Backend Documentation
+    name: Deploy Frontend Documentation
     needs: build
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy 2025-Backend Documentation to GitHub Pages
+      - name: Deploy Frontend Documentation to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4 
