@@ -203,19 +203,92 @@ def generate_wiki_content(wiki_dir: Path, data_dir: Path):
     try:
         # Home.md
         with open(wiki_dir / 'Home.md', 'w', encoding='utf-8') as f:
-            f.write("""# Frontend E-commerce
-Bienvenido a la Wiki del Frontend E-commerce de Naiara Errecalde.
+            f.write("""# 2025-Backend Project Wiki
+
+Bienvenido a la Wiki oficial del proyecto 2025-Backend, una aplicación web full-stack con arquitectura de microservicios containerizada usando Docker.
 
 ## Navegación Rápida
 
-- [[Milestones]]
-- [[Issues-Activos]]
-- [[Issues-Cerrados]]
+- [[Milestones]] - Objetivos y progreso del proyecto
+- [[Issues-Activos]] - Tareas pendientes
+- [[Issues-Cerrados]] - Tareas completadas
+- [[Tecnologías]] - Stack tecnológico
+- [[Arquitectura]] - Diseño del sistema
+""")
+
+        # Tecnologías.md
+        with open(wiki_dir / 'Tecnologías.md', 'w', encoding='utf-8') as f:
+            f.write("""# Tecnologías Utilizadas
+
+## Backend
+- **Node.js**: Entorno de ejecución para JavaScript
+- **Express**: Framework web para Node.js
+- **Sequelize ORM**: ORM para interactuar con la base de datos
+- **JWT**: Para autenticación segura
+
+## Frontend
+- **React**: Biblioteca JavaScript para interfaces de usuario
+- **React Router**: Enrutamiento para React
+- **Axios**: Cliente HTTP para realizar peticiones
+- **SweetAlert2**: Para notificaciones amigables
+
+## Base de Datos
+- **MySQL**: Sistema de gestión de bases de datos relacional
+
+## Infraestructura
+- **Docker**: Para containerización
+- **Docker Compose**: Para orquestar múltiples contenedores
+- **Nginx**: Como servidor web para el frontend
+""")
+
+        # Arquitectura.md
+        with open(wiki_dir / 'Arquitectura.md', 'w', encoding='utf-8') as f:
+            f.write("""# Arquitectura del Proyecto
+
+## Visión General
+
+El proyecto 2025-Backend implementa una arquitectura de microservicios containerizada, donde cada componente del sistema se ejecuta en su propio contenedor Docker, facilitando el desarrollo, despliegue y escalabilidad.
+
+## Componentes Principales
+
+### Backend API (Node.js/Express)
+- Maneja la lógica de negocio
+- Expone endpoints RESTful
+- Se comunica con la base de datos
+- Implementa autenticación y autorización
+
+### Frontend (React)
+- Interfaz de usuario responsive
+- Consume la API del backend
+- Gestiona el estado de la aplicación
+- Implementa rutas y navegación
+
+### Base de Datos (MySQL)
+- Almacena datos persistentes
+- Se conecta con el backend a través de Sequelize ORM
+- Mantiene la integridad de los datos
+
+### Servidor Web (Nginx)
+- Sirve la aplicación frontend
+- Actúa como proxy inverso para el backend
+- Maneja SSL/TLS
+- Optimiza la entrega de contenido estático
+
+## Comunicación entre Servicios
+
+Los servicios se comunican principalmente a través de peticiones HTTP/HTTPS, siguiendo principios RESTful.
+
+## Seguridad
+
+- JWT para autenticación
+- HTTPS para comunicación segura
+- Validación de datos de entrada
+- Políticas de CORS configuradas
 """)
 
         # Milestones.md
         with open(wiki_dir / 'Milestones.md', 'w', encoding='utf-8') as f:
-            f.write("# Milestones del Frontend\n\n")
+            f.write("# Milestones del Proyecto 2025-Backend\n\n")
             for ms in milestones:
                 f.write(f"## {ms['title']}\n")
                 f.write(f"**Estado:** {ms['state']}\n\n")
@@ -223,6 +296,14 @@ Bienvenido a la Wiki del Frontend E-commerce de Naiara Errecalde.
                 f.write(f"**Descripción:** {description}\n\n")
                 if ms.get('due_on'):
                     f.write(f"**Fecha límite:** {ms['due_on']}\n\n")
+                
+                # Añadir progreso si está disponible
+                if 'progress' in ms:
+                    f.write(f"**Progreso:** {ms['progress']:.1f}%\n\n")
+                if 'open_issues' in ms and 'closed_issues' in ms:
+                    total = ms['open_issues'] + ms['closed_issues']
+                    f.write(f"**Issues:** {ms['closed_issues']} cerrados de {total} totales\n\n")
+                
                 f.write("---\n\n")
 
         # Issues-Activos.md
@@ -243,10 +324,12 @@ Bienvenido a la Wiki del Frontend E-commerce de Naiara Errecalde.
 
         active_issues = [i for i in issues if i['state'] == 'open']
         with open(wiki_dir / 'Issues-Activos.md', 'w', encoding='utf-8') as f:
-            f.write("# Issues Activos - Frontendn\n")
+            f.write("# Issues Activos - Proyecto 2025-Backend\n\n")
             for issue in active_issues:
                 f.write(f"## #{issue['number']}: {issue['title']}\n")
                 f.write(f"**Creado:** {issue['created_at']}\n\n")
+                
+                # Mostrar milestone (considerar diferentes formatos)
                 if issue.get('milestone'):
                     # Si milestone es un diccionario
                     if isinstance(issue['milestone'], dict):
@@ -255,21 +338,35 @@ Bienvenido a la Wiki del Frontend E-commerce de Naiara Errecalde.
                     else:
                         milestone_title = issue['milestone']
                     f.write(f"**Milestone:** {milestone_title}\n\n")
+                
+                # Mostrar etiquetas
                 if issue.get('labels'):
                     labels = format_labels(issue['labels'])
                     if labels:
                         f.write(f"**Labels:** {', '.join(labels)}\n\n")
+                
+                # Mostrar asignados
+                if issue.get('assignees') and issue['assignees']:
+                    f.write(f"**Asignado a:** {', '.join(issue['assignees'])}\n\n")
+                
+                # Mostrar enlace al issue
+                if issue.get('url'):
+                    f.write(f"**Link:** [{issue['number']}]({issue['url']})\n\n")
+                
+                # Mostrar cuerpo del issue
                 body = issue.get('body') or 'Sin descripción'
                 f.write(f"{body}\n\n---\n\n")
 
         # Issues-Cerrados.md
         closed_issues = [i for i in issues if i['state'] == 'closed']
         with open(wiki_dir / 'Issues-Cerrados.md', 'w', encoding='utf-8') as f:
-            f.write("# Issues Cerrados - Frontend\n\n")
+            f.write("# Issues Cerrados - Proyecto 2025-Backend\n\n")
             for issue in closed_issues:
                 f.write(f"## #{issue['number']}: {issue['title']}\n")
                 f.write(f"**Creado:** {issue['created_at']}\n")
                 f.write(f"**Cerrado:** {issue.get('closed_at', 'Desconocido')}\n\n")
+                
+                # Mostrar milestone (considerar diferentes formatos)
                 if issue.get('milestone'):
                     # Si milestone es un diccionario
                     if isinstance(issue['milestone'], dict):
@@ -278,16 +375,24 @@ Bienvenido a la Wiki del Frontend E-commerce de Naiara Errecalde.
                     else:
                         milestone_title = issue['milestone']
                     f.write(f"**Milestone:** {milestone_title}\n\n")
+                
+                # Mostrar etiquetas
                 if issue.get('labels'):
                     labels = format_labels(issue['labels'])
                     if labels:
                         f.write(f"**Labels:** {', '.join(labels)}\n\n")
+                
+                # Mostrar enlace al issue
+                if issue.get('url'):
+                    f.write(f"**Link:** [{issue['number']}]({issue['url']})\n\n")
+                
+                # Mostrar cuerpo del issue
                 body = issue.get('body') or 'Sin descripción'
                 f.write(f"{body}\n\n---\n\n")
 
         return True
     except IOError as e:
-        print(f"Error escribiendo archivos de la wiki del Frontend: {e}")
+        print(f"Error escribiendo archivos de la wiki del Proyecto 2025-Backend: {e}")
         return False
 
 def verify_json_content(file_path):
